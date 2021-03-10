@@ -20,6 +20,8 @@ import org.springframework.web.bind.annotation.RestController;
 
 import com.training.micro.services.PersonManager;
 
+import io.swagger.v3.oas.annotations.Operation;
+
 @RestController
 @RequestMapping("/api/v1/person/management")
 @Validated
@@ -46,6 +48,7 @@ public class PersonController {
         return person;
     }
 
+    @Operation(description = "xyz description", method = "POST", tags = "tag1")
     @PostMapping(value = "/custom/response")
     public ResponseEntity<Person> custom(@Validated @RequestBody final Person person) {
         //
