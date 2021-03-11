@@ -1,0 +1,11 @@
+docker network create --driver bridge ykb_net1
+
+docker run -d --name config --network ykb_net1 node-config
+docker run -d --name discovery --network ykb_net1 -p 4444:80 node-discovery
+
+docker run -d --name accounting1 -e DISCOVERY=http://discovery/eureka/ -e CONFIG=http://config --network ykb_net1 ms-accounting
+docker run -d --name accounting2 -e DISCOVERY=http://discovery/eureka/ -e CONFIG=http://config --network ykb_net1 ms-accounting
+docker run -d --name order1 -e DISCOVERY=http://discovery/eureka/ -e CONFIG=http://config --network ykb_net1 ms-order
+docker run -d --name order2 -e DISCOVERY=http://discovery/eureka/ -e CONFIG=http://config --network ykb_net1 ms-order
+
+docker run -d --name apigateway -e DISCOVERY=http://discovery/eureka/ --network ykb_net1 -p 8080:80 node-apigateway
