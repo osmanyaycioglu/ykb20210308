@@ -15,6 +15,8 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.ResponseStatus;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 
+import com.training.micro.error.client.RestClientException;
+
 @RestControllerAdvice
 public class ErrorAdvice {
 
@@ -27,6 +29,15 @@ public class ErrorAdvice {
         return this.errConf.createBaseError()
                            .setDesc("Error : " + exp.getMessage())
                            .setCause(100);
+    }
+
+    @ExceptionHandler(RestClientException.class)
+    @ResponseStatus(HttpStatus.BAD_GATEWAY)
+    public ErrorObject handleError(final RestClientException exp) {
+        return this.errConf.createBaseError()
+                           .setDesc("Error while calling another MS ")
+                           .setCause(300)
+                           .addSubErrorObject(exp.getErrorObject());
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)

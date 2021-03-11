@@ -7,6 +7,7 @@ import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.training.micro.error.client.RestClientException;
 import com.training.micro.order.models.Order;
 import com.training.micro.order.services.OrderService;
 
@@ -23,7 +24,7 @@ public class OrderController {
     }
 
     @PostMapping("/place2")
-    public String place2(@Validated @RequestBody final Order order) {
+    public String place2(@Validated @RequestBody final Order order) throws RestClientException {
         return this.os.placeOrder2(order);
     }
 

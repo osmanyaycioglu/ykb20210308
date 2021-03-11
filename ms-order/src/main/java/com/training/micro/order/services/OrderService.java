@@ -10,6 +10,7 @@ import org.springframework.web.client.RestTemplate;
 import com.netflix.appinfo.InstanceInfo;
 import com.netflix.discovery.EurekaClient;
 import com.netflix.discovery.shared.Application;
+import com.training.micro.error.client.RestClientException;
 import com.training.micro.order.models.Order;
 import com.training.micro.order.models.PaymentRequest;
 import com.training.micro.order.rest.clients.IAccountingClient;
@@ -37,7 +38,7 @@ public class OrderService {
         return postForObjectLoc;
     }
 
-    public String placeOrder2(final Order order) {
+    public String placeOrder2(final Order order) throws RestClientException {
         PaymentRequest pr = new PaymentRequest();
         pr.setAmount(BigDecimal.TEN);
         pr.setCustomerId(order.getCustomerId());
