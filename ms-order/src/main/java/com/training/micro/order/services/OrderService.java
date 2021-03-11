@@ -3,6 +3,7 @@ package com.training.micro.order.services;
 import java.math.BigDecimal;
 import java.util.List;
 
+import org.springframework.amqp.rabbit.core.RabbitTemplate;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.web.client.RestTemplate;
@@ -11,6 +12,7 @@ import com.netflix.appinfo.InstanceInfo;
 import com.netflix.discovery.EurekaClient;
 import com.netflix.discovery.shared.Application;
 import com.training.micro.error.client.RestClientException;
+import com.training.micro.order.models.NotifyRequest;
 import com.training.micro.order.models.Order;
 import com.training.micro.order.models.PaymentRequest;
 import com.training.micro.order.rest.clients.IAccountingClient;
@@ -20,6 +22,9 @@ public class OrderService {
 
     @Autowired
     private RestTemplate      rt;
+
+    @Autowired
+    private RabbitTemplate    rabbit;
 
     @Autowired
     private EurekaClient      eurekaClient;
@@ -43,7 +48,17 @@ public class OrderService {
         pr.setAmount(BigDecimal.TEN);
         pr.setCustomerId(order.getCustomerId());
         pr.setCustomerName(order.getCustomerName());
-        return this.accountingClient.pay(pr);
+        String payLoc = this.accountingClient.pay(pr);
+        NotifyRequest requestLoc = new NotifyRequest();
+        requestLoc.setMessage("Siparişiniz alındı : " + order.getCustomerName());
+        requestLoc.setDestination("32948234");
+        this.rabbit.convertAndSend("notify-exc",
+                                   "notify.sms",
+                                   requestLoc);
+        this.rabbit.convertAndSend("notify-topic-exc",
+                                   "notify.topic.sms.tr.istanbul",
+                                   requestLoc);
+        return payLoc;
     }
 
 

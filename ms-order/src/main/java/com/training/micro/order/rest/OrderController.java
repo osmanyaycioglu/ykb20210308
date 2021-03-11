@@ -1,7 +1,10 @@
 package com.training.micro.order.rest;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.cloud.context.config.annotation.RefreshScope;
 import org.springframework.validation.annotation.Validated;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -13,10 +16,19 @@ import com.training.micro.order.services.OrderService;
 
 @RestController
 @RequestMapping("/api/v1/management/order/")
+@RefreshScope
 public class OrderController {
 
     @Autowired
     private OrderService os;
+
+    @Value("${a.b.d}")
+    private String       testStr;
+
+    @GetMapping("/test")
+    public String test() {
+        return this.testStr;
+    }
 
     @PostMapping("/place")
     public String place(@Validated @RequestBody final Order order) {
