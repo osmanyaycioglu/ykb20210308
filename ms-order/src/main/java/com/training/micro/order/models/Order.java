@@ -2,11 +2,21 @@ package com.training.micro.order.models;
 
 import java.util.List;
 
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
+
 public class Order {
 
+    @NotNull
+    @Positive
     private Long         orderId;
+    @NotNull
+    @Positive
     private Long         customerId;
+    @NotEmpty
     private String       customerName;
+    @NotNull
     private List<String> meals;
 
     public Long getOrderId() {

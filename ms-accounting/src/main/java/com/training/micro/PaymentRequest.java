@@ -2,10 +2,23 @@ package com.training.micro;
 
 import java.math.BigDecimal;
 
+import javax.validation.constraints.Max;
+import javax.validation.constraints.NotEmpty;
+import javax.validation.constraints.NotNull;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.Size;
+
 public class PaymentRequest {
 
+    @NotNull
+    @Positive
     private Long       customerId;
+    @NotEmpty
+    @Size(min = 2, max = 20)
     private String     customerName;
+    @NotNull
+    @Max(1000)
+    @Positive
     private BigDecimal amount;
 
     public Long getCustomerId() {

@@ -1,6 +1,7 @@
 package com.training.micro;
 
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,7 +15,7 @@ public class PaymentController {
     private int port;
 
     @PostMapping("/pay")
-    public String pay(@RequestBody final PaymentRequest pr) {
+    public String pay(@Validated @RequestBody final PaymentRequest pr) {
         return "payment success : " + this.port + " PR : " + pr;
     }
 
